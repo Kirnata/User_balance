@@ -1,18 +1,29 @@
 package repository
 
-import "github.com/jmoiron/sqlx"
+import (
+	"github.com/Kirnata/User_balance"
+	"github.com/jmoiron/sqlx"
+)
 
 type Authorization interface {
+	CreateUser(user User_balance.User) (int, error)
+	GetUser(username, password string) (User_balance.User, error)
 }
 
-type Transaction interface {
+type TodoList interface {
+}
+
+type TodoItem interface {
 }
 
 type Repository struct {
 	Authorization
-	Transaction
+	TodoList
+	TodoItem
 }
 
 func NewRepository(db *sqlx.DB) *Repository {
-	return &Repository{}
+	return &Repository{
+		Authorization: NewAuthPostgres(db),
+	}
 }

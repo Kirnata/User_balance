@@ -6,19 +6,21 @@ import (
 )
 
 type Handler struct {
-	services service.Service
+	service *service.Service
 }
 
 func NewHandler(s *service.Service) *Handler {
-	return &Handler{}
+	return &Handler{
+		service: s,
+	}
 }
 
 func (h *Handler) InitRouts() *gin.Engine {
 	router := gin.New()
 	auth := router.Group("/auth")
 	{
-		auth.POST("/sign-up", h.signUp)
-		auth.POST("/sign-in", h.signIn)
+		auth.POST("/sign_up", h.signUp)
+		auth.POST("/sign_in", h.signIn)
 	}
 
 	api := router.Group("/api", h.userIdentity)

@@ -1,5 +1,5 @@
 port: "8000"
-
+log_level: "info"
 db:
   host: "localhost"
   port: "5432"
