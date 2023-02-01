@@ -1,11 +1,15 @@
 package handler
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/Kirnata/User_balance/internal/service"
+	"github.com/gin-gonic/gin"
+)
 
 type Handler struct {
+	services service.Service
 }
 
-func NewHandler() *Handler {
+func NewHandler(s *service.Service) *Handler {
 	return &Handler{}
 }
 
