@@ -5,9 +5,9 @@ import (
 	"github.com/Kirnata/User_balance/internal/handler"
 	"github.com/Kirnata/User_balance/internal/repository"
 	"github.com/Kirnata/User_balance/internal/service"
-	"github.com/Kirnata/User_balance/pkg/logger"
 	"github.com/joho/godotenv"
 	"github.com/spf13/viper"
+	"go.uber.org/zap"
 	"log"
 	"os"
 )
@@ -15,17 +15,24 @@ import (
 //var _ http.Handler = gin.New()
 
 func main() {
-	zapLog, err := logger.InitializeLogger()
-	if err != nil {
-		log.Fatalf("Error in creation zapLogger: %s", err.Error())
+	zapLogger, errZap := zap.NewProduction()
+	if errZap != nil {
+		log.Println("Error in creation zapLogger")
 	}
-	if err := initConfig(); err != nil {
-		zapLog.Fatalf("error initializion configs: %s", err.Error())
+	defer func(zapLogger *zap.Logger) {
+		err := zapLogger.Sync()
+		if err != nil {
+			log.Println(err)
+		}
+	}(zapLogger)
+	logger := zapLogger.Sugar()
 
+	if err := initConfig(); err != nil {
+		logger.Fatalf("error initializion configs: %s", err.Error())
 	}
 
 	if err := godotenv.Load(); err != nil {
-		zapLog.Fatalf("error loading env variables: %s", err.Error())
+		logger.Fatalf("error loading env variables: %s", err.Error())
 	}
 
 	db, err := repository.NewPostgresDB(repository.Config{
@@ -37,14 +44,14 @@ func main() {
 		Password: os.Getenv("DB_PASSWORD"),
 	})
 	if err != nil {
-		zapLog.Fatalf("failed to initialized db: %s", err.Error())
+		logger.Fatalf("failed to initialized db: %s", err.Error())
 	}
 	repo := repository.NewRepository(db)
 	services := service.NewService(repo)
 	handlers := handler.NewHandler(services)
 	srv := new(User_balance.Server)
 	if err := srv.Run(viper.GetString("port"), handlers.InitRouts()); err != nil {
-		zapLog.Fatalf("error occurred while running http server: %s", err.Error())
+		logger.Fatalf("error occurred while running http server: %s", err.Error())
 	}
 }
 
