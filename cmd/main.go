@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"github.com/Kirnata/User_balance"
 	"github.com/Kirnata/User_balance/internal/handler"
 	"github.com/Kirnata/User_balance/internal/repository"
@@ -10,6 +11,8 @@ import (
 	"go.uber.org/zap"
 	"log"
 	"os"
+	"os/signal"
+	"syscall"
 )
 
 //var _ http.Handler = gin.New()
@@ -50,8 +53,22 @@ func main() {
 	services := service.NewService(repo)
 	handlers := handler.NewHandler(services)
 	srv := new(User_balance.Server)
-	if err := srv.Run(viper.GetString("port"), handlers.InitRouts()); err != nil {
-		logger.Fatalf("error occurred while running http server: %s", err.Error())
+	go func {
+		if err := srv.Run(viper.GetString("port"), handlers.InitRouts()); err != nil {
+			logger.Fatalf("error occurred while running http server: %s", err.Error())
+		}
+	} ()
+	logger.Info("User_balance started")
+
+	quit := make(chan os.Signal)
+	signal.Notify(quit, syscall.SIGTERM, syscall.SIGINT)
+	<-quit
+	logger.Info("User_balance finished")
+	if err := srv.ShutDown(context.Background()); err != nil {
+		logger.Errorf("error occurred on server shutting down: %s", err)
+	}
+	if err := db.Close(); err != nil {
+		logger.Errorf("error occurred on db connection close: %s", err)
 	}
 }
 
