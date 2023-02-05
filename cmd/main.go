@@ -53,11 +53,11 @@ func main() {
 	services := service.NewService(repo)
 	handlers := handler.NewHandler(services)
 	srv := new(User_balance.Server)
-	go func {
+	go func() {
 		if err := srv.Run(viper.GetString("port"), handlers.InitRouts()); err != nil {
 			logger.Fatalf("error occurred while running http server: %s", err.Error())
 		}
-	} ()
+	}()
 	logger.Info("User_balance started")
 
 	quit := make(chan os.Signal)

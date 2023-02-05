@@ -10,20 +10,22 @@ type Authorization interface {
 	GetUser(username, password string) (User_balance.User, error)
 }
 
-type TodoList interface {
+type Payments interface {
 }
 
-type TodoItem interface {
+type Balance interface {
+	GetBalance(id int) (float32, error)
 }
 
 type Repository struct {
 	Authorization
-	TodoList
-	TodoItem
+	Payments
+	Balance
 }
 
 func NewRepository(db *sqlx.DB) *Repository {
 	return &Repository{
 		Authorization: NewAuthPostgres(db),
+		Balance:       NewBalanceServicePostgres(db),
 	}
 }

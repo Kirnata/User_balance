@@ -25,8 +25,10 @@ func (h *Handler) InitRouts() *gin.Engine {
 
 	api := router.Group("/api", h.userIdentity)
 	{
-		api.POST("/", h.CreateTransaction)
-		api.GET("/", h.GetAllTransaction)
+		api.POST("/b2b_pay", h.CreateB2BPay)
+		api.POST("/single_pay", h.CreateSinglePay)
+		api.GET("/get_history", h.GetAllPayments)
+		api.GET("/get_balance", h.getBalance)
 	}
 	return router
 }
