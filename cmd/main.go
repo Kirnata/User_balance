@@ -15,8 +15,6 @@ import (
 	"syscall"
 )
 
-//var _ http.Handler = gin.New()
-
 func main() {
 	zapLogger, errZap := zap.NewProduction()
 	if errZap != nil {

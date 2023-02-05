@@ -1,18 +1,50 @@
+#version: '3'
+#services:
+#  postgres:
+#    image: "postgres:14-alpine"
+#    container_name: "postgres_container"
+#    environment:
+#      - POSTGRES_DB=postgres
+#      - POSTGRES_USER=postgres
+#      - POSTGRES_PASSWORD=qwerty
+#      - PGDATA=/var/lib/postgresql/data/pgdata
+#    ports:
+#      - "5432:5432"
+#    volumes:
+#      - ./db/data:/var/lib/postgresql/data
+#      - ./db/init:/docker-entrypoint-initdb.d
+#    restart: unless-stopped
+#    healthcheck:
+#      test: [ "CMD-SHELL", "pg_isready -U user -d postgres_container" ]
 version: '3'
 services:
-  postgres:
+  pgdb:
     image: "postgres:14-alpine"
     container_name: "postgres_container"
     environment:
-      - POSTGRES_DB=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=qwerty
-      - PGDATA=/var/lib/postgresql/data/pgdata
+          - POSTGRES_DB=postgres
+          - POSTGRES_USER=postgres
+          - POSTGRES_PASSWORD=qwerty
+          - PGDATA=/var/lib/postgresql/data/pgdata
     ports:
       - "5432:5432"
     volumes:
-      - ./db/data:/var/lib/postgresql/data
-      - ./db/init:/docker-entrypoint-initdb.d
+          - ./db/data:/var/lib/postgresql/data
+          - ./db/init:/docker-entrypoint-initdb.d
     restart: unless-stopped
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U user -d postgres_container" ]
+  app:
+    image: golang_container
+    container_name: golang_container
+    build: .
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    depends_on:
+      - pgdb
+    env_file:
+      - ./.env
+    #    links - связь контейнеров в сети
+    links:
+      - pgdb
