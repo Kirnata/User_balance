@@ -12,6 +12,7 @@ type Authorization interface {
 
 type Payments interface {
 	CreateSinglePay(id int, input User_balance.SinglePay) (int, error)
+	CreateB2BPay(id int, input User_balance.B2BPay) (int, error)
 }
 
 type Balance interface {

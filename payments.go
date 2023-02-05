@@ -8,6 +8,12 @@ type History struct {
 }
 
 type SinglePay struct {
-	Amount      float32 `json:"amount"`
-	Description string  `json:"description"`
+	Amount      float32 `json:"amount" binding:"required"`
+	Description string  `json:"description" binding:"required"`
+}
+
+type B2BPay struct {
+	GetterId    int     `json:"getter_id" binding:"required"`
+	Amount      float32 `json:"amount" binding:"required"`
+	Description string  `json:"description" binding:"required"`
 }

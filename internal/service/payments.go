@@ -18,3 +18,7 @@ func NewPayService(repo repository.Payments) *PayService {
 func (s PayService) CreateSinglePay(id int, input User_balance.SinglePay) (int, error) {
 	return s.repo.CreateSinglePay(id, input)
 }
+
+func (s PayService) CreateB2BPay(id int, input User_balance.B2BPay) (int, error) {
+	return s.repo.CreateB2BPay(id, input)
+}
