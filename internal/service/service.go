@@ -12,7 +12,7 @@ type Authorization interface {
 }
 
 type Payments interface {
-	//CreateSinglePay(id int) (int, error)
+	CreateSinglePay(id int, input User_balance.SinglePay) (int, error)
 }
 
 type Balance interface {
@@ -29,5 +29,6 @@ func NewService(repos *repository.Repository) *Service {
 	return &Service{
 		Authorization: newAuthService(repos.Authorization),
 		Balance:       NewBalanceService(repos.Balance),
+		Payments:      NewPayService(repos.Payments),
 	}
 }

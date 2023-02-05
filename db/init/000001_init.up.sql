@@ -11,8 +11,8 @@ CREATE TABLE IF NOT EXISTS history
 (
     id  bigserial  not null unique,
     sender_id int check (sender_id > 0) references users(id) not null,
-    getter_id int check (getter_id > 0) references users(id) not null,
+    getter_id int check (getter_id > 0) references users(id),
     value decimal(18,2) check (value > 0) not null,
-    occurred_at timestamptz NOT NULL,
+
     description text
 );

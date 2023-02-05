@@ -9,7 +9,7 @@ type BalanceServicePostgres struct {
 	db *sqlx.DB
 }
 
-func NewBalanceServicePostgres(db *sqlx.DB) *BalanceServicePostgres {
+func NewBalancePostgres(db *sqlx.DB) *BalanceServicePostgres {
 	return &BalanceServicePostgres{
 		db: db,
 	}

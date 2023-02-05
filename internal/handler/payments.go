@@ -1,24 +1,32 @@
 package handler
 
 import (
+	"github.com/Kirnata/User_balance"
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
 func (h *Handler) CreateSinglePay(c *gin.Context) {
-	//id, err := getUserId(c)
-	//if err != nil {
-	//	return
-	//}
+	id, err := getUserId(c)
+	if err != nil {
+		return
+	}
 
-	//payId, err := h.service.Balance.GetBalance(id)
-	//if err != nil {
-	//	newErrorResponse(c, http.StatusInternalServerError, err.Error())
-	//	return
-	//}
-	//
-	//c.JSON(http.StatusOK, map[string]interface{}{
-	//	"balance": balance,
-	//})
+	var input User_balance.SinglePay
+	if err := c.BindJSON(&input); err != nil {
+		newErrorResponse(c, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	payId, err := h.service.Payments.CreateSinglePay(id, input)
+	if err != nil {
+		newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	c.JSON(http.StatusOK, map[string]interface{}{
+		"payId": payId,
+	})
 }
 
 func (h *Handler) GetAllPayments(c *gin.Context) {

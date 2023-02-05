@@ -7,7 +7,6 @@ import (
 	"github.com/Kirnata/User_balance/internal/repository"
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/pkg/errors"
-	"log"
 	"time"
 )
 
@@ -39,7 +38,6 @@ func (s *AuthService) GenerateToken(username, password string) (string, error) {
 	passwordHash := s.generatePasswordHash(password)
 	user, err := s.repo.GetUser(username, passwordHash)
 	if err != nil {
-		log.Println("huihuihui")
 		return "", err
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, &tokenClaims{

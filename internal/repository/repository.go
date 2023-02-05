@@ -11,6 +11,7 @@ type Authorization interface {
 }
 
 type Payments interface {
+	CreateSinglePay(id int, input User_balance.SinglePay) (int, error)
 }
 
 type Balance interface {
@@ -26,6 +27,7 @@ type Repository struct {
 func NewRepository(db *sqlx.DB) *Repository {
 	return &Repository{
 		Authorization: NewAuthPostgres(db),
-		Balance:       NewBalanceServicePostgres(db),
+		Balance:       NewBalancePostgres(db),
+		Payments:      NewPayPostgres(db),
 	}
 }
