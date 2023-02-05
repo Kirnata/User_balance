@@ -19,10 +19,15 @@ type Balance interface {
 	GetBalance(id int) (float32, error)
 }
 
+type History interface {
+	GetHistory(id int) ([]User_balance.History, error)
+}
+
 type Repository struct {
 	Authorization
 	Payments
 	Balance
+	History
 }
 
 func NewRepository(db *sqlx.DB) *Repository {
@@ -30,5 +35,6 @@ func NewRepository(db *sqlx.DB) *Repository {
 		Authorization: NewAuthPostgres(db),
 		Balance:       NewBalancePostgres(db),
 		Payments:      NewPayPostgres(db),
+		History:       NewHistoryPostgres(db),
 	}
 }

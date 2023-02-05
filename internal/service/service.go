@@ -20,10 +20,15 @@ type Balance interface {
 	GetBalance(id int) (float32, error)
 }
 
+type History interface {
+	GetHistory(id int) ([]User_balance.History, error)
+}
+
 type Service struct {
 	Authorization
 	Payments
 	Balance
+	History
 }
 
 func NewService(repos *repository.Repository) *Service {
@@ -31,5 +36,6 @@ func NewService(repos *repository.Repository) *Service {
 		Authorization: newAuthService(repos.Authorization),
 		Balance:       NewBalanceService(repos.Balance),
 		Payments:      NewPayService(repos.Payments),
+		History:       NewHistoryService(repos.History),
 	}
 }

@@ -29,10 +29,6 @@ func (h *Handler) CreateSinglePay(c *gin.Context) {
 	})
 }
 
-func (h *Handler) GetAllPayments(c *gin.Context) {
-
-}
-
 func (h *Handler) CreateB2BPay(c *gin.Context) {
 	id, err := getUserId(c)
 	if err != nil {

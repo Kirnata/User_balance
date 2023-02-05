@@ -27,7 +27,7 @@ func (h *Handler) InitRouts() *gin.Engine {
 	{
 		api.POST("/b2b_pay", h.CreateB2BPay)
 		api.POST("/single_pay", h.CreateSinglePay)
-		api.GET("/get_history", h.GetAllPayments)
+		api.GET("/get_history", h.GetHistory)
 		api.GET("/get_balance", h.getBalance)
 	}
 	return router
